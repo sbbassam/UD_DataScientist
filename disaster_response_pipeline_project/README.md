@@ -38,7 +38,7 @@ The ML pipeline steps are:
 - Export the final model as a pickle file
 
 #### 3. Flask Web App
-This step, dispays the results in a Flask web app. You will need to upload your database file and pkl file with your model. The template files for the simple visualization is provided in a../template, for home page(master) and result page (go.html). Following is snapshot of the pages:
+This step, dispays the results in a Flask web app. You will need to upload your database file and pkl file with your model. The template files for the simple visualization is provided in a../template directory, for home page(master.html) and result page (go.html). Following is snapshot of the pages:
 
 ![HomePage](https://raw.githubusercontent.com/sbbassam/UD_DataScientist/master/disaster_response_pipeline_project/app/templates/HomePage.png)
 
