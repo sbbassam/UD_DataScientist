@@ -9,7 +9,8 @@ import workspace_utils as ws
 from sqlalchemy import create_engine
 # NLP
 import nltk
-nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
+nltk.download(['punkt', 'wordnet','stopwords', 'averaged_perceptron_tagger'])
+from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 #ML
@@ -25,7 +26,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, accuracy_score, f1_score, fbeta_score, classification_report
-# pickle to store model
+#Pickle
 import pickle
 
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
@@ -91,6 +92,7 @@ def tokenize(text):
         text = text.replace(url, "urlplaceholder")
 
     tokens = word_tokenize(text)
+    tokens = [w for w in tokens if w not in stopwords.words('english') ]
     lemmatizer = WordNetLemmatizer()
 
     clean_tokens = []
@@ -111,22 +113,35 @@ def build_model():
     Return: model: machine learning model described above
     """
     # pipeline containing Tf-Idf and Random Forest Classifier
-    Tuned_MOC = MultiOutputClassifier(OneVsRestClassifier(LinearSVC(random_state=0, multi_class='crammer_singer',C = 5)))
+    MOC = MultiOutputClassifier(OneVsRestClassifier(LinearSVC(random_state=0)))
     pipeline = Pipeline([
         ('features', FeatureUnion([
 
             ('text_pipeline', Pipeline([
-                ('vect', CountVectorizer(tokenizer=tokenize,ngram_range=(1,5))),
-                ('tfidf', TfidfTransformer(use_idf=False))
+                ('vect', CountVectorizer(tokenizer=tokenize,)),
+                ('tfidf', TfidfTransformer())
             ])),
 
             ('starting_verb', StartingVerbExtractor())
         ])),
 
-        ('clf', Tuned_MOC)
+        ('clf', MOC)
     ])
 
-    return pipeline
+    f1 = make_scorer(f1_score , average='macro')
+    
+    parameters = {
+    
+    'features__text_pipeline__tfidf__use_idf': (True, False),
+    'clf__estimator__estimator__multi_class': ('ovr','crammer_singer'),
+    'clf__estimator__estimator__C': [1, 2, 5],
+    'features__text_pipeline__vect__ngram_range':((1, 3), (1, 4),(1,5))
+    }
+    
+    
+    cv = GridSearchCV(pipeline,param_grid=parameters,verbose=1,scoring=f1)
+
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
