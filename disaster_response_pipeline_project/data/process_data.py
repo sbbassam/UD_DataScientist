@@ -69,6 +69,12 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    '''
+    Saves the dataframe into a SQL lite database file in the "Messages" table.
+    
+    Input: Dataframe
+           Database file name 
+    '''
     engine = create_engine('sqlite:///'+ database_filename)
     df.to_sql('Messages', engine, index=False,if_exists='replace')
     
