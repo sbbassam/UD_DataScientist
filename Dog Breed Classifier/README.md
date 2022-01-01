@@ -31,7 +31,7 @@ To speed up training time, it is highly recommended to use GPU. The dataset used
 
 ### Blog Post
 
-This repository is discussed in the blog post here.
+This repository is discussed in the blog post here [https://medium.com/@bassam.sb/dog-breed-classification-using-cnn-9469185b36d8].
 
 ### Licensing, Authors, Acknowledgements
 
