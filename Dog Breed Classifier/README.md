@@ -31,7 +31,7 @@ To speed up training time, it is highly recommended to use GPU. The dataset used
 
 ### Blog Post
 
-This repository is discussed in the blog post here[https://medium.com/@bassam.sb/dog-breed-classification-using-cnn-2bb7437e4245].
+This repository is discussed in the blog post [here](https://medium.com/@bassam.sb/dog-breed-classification-using-cnn-2bb7437e4245)
 ### Licensing, Authors, Acknowledgements
 
 The dataset and the initial workspace was provided by Udacity as part of its Data Scientist Nanodegree program. A LICENSE file is added in this repo to state clearly its licence.
